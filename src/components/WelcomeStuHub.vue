@@ -23,7 +23,7 @@
             </button>
             <button class="titleBtn" @click="signOut" v-show="loginUser">SignOut <i class="el-icon-hot-water"/></button>
             <button class="titleBtn" @click="reg">SignUp <i class="el-icon-coffee-cup"/></button>
-            <button class="titleBtn titleBtn2">
+            <button class="titleBtn titleBtn2" @click="toClass">
               Find CLass
             </button>
             <button class="titleBtn titleBtn2 router_btn" > <router-link class="router_link" to="/ContentPage"> {{ enterMessage }}</router-link><i class="el-icon-cold-drink"/>
@@ -158,6 +158,9 @@ export default {
   props: [
   ],
   methods: {
+    toClass(){
+      this.$router.push('/ClassPage');
+    },
     can_edit(event){
       if(!this.loginUser){
         event.preventDefault();

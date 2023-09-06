@@ -19,8 +19,7 @@ export default {
       this.publish()
     },
     startEdit_() {
-      this.startEdit(true)
-      this.welcomeFade(false)
+      this.$router.push('/');
     },
   },
   props:[
