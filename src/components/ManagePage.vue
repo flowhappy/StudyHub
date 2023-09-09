@@ -85,7 +85,6 @@ export default {
       title: [],
     }
   },
-  props: [],
   // mounted() {
   //   axios.get(`https://www.lloydyide.cn/stuhub/getArticleTitle.php`).then(
   //       response => {
