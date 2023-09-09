@@ -24,7 +24,7 @@
             <button class="titleBtn" @click="signOut" v-show="loginUser">SignOut <i class="el-icon-hot-water"/></button>
             <button class="titleBtn" @click="reg">SignUp <i class="el-icon-coffee-cup"/></button>
             <button class="titleBtn titleBtn2" @click="toClass">
-              Find CLass
+              Enter the management<i class="el-icon-cold-drink"/>
             </button>
             <button class="titleBtn titleBtn2 router_btn" > <router-link class="router_link" to="/ContentPage"> {{ enterMessage }}</router-link><i class="el-icon-cold-drink"/>
             </button>
@@ -159,7 +159,11 @@ export default {
   ],
   methods: {
     toClass(){
-      this.$router.push('/ClassPage');
+      if(this.loginUser){
+        this.$router.push('/ManagePage');
+      }else{
+        this.welError('You should SignIn first')
+      }
     },
     can_edit(event){
       if(!this.loginUser){
