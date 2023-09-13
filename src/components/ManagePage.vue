@@ -30,7 +30,7 @@
             <el-menu-item-group>
               <el-menu-item index="1-1">
                 <router-link to="/ChangeUserName" id="deluser">
-                  修改用户名
+                  删除用户
                 </router-link>
               </el-menu-item>
             </el-menu-item-group>

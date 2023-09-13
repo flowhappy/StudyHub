@@ -24,7 +24,7 @@
         width="300">
       <template slot-scope="scope">
         <el-button
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
+            @click.native.prevent="deleteUser(scope.$index, users)"
             type="text"
             size="small">
           移除
@@ -39,8 +39,20 @@ import axios from "axios";
 
 export default {
   methods: {
-    deleteRow(index, rows) {
-      rows.splice(index, 1);
+    deleteUser(index, users) {
+      let userid = users[index].id
+      axios.get(`https://www.lloydyide.cn/stuhub/delUser.php?id=${userid}`).then(
+          response => {
+            this.tableData = response.data
+            axios.get(`https://www.lloydyide.cn/stuhub/getAllUsers.php`).then(
+                response => {
+                  this.users = response.data
+                  console.log(response.data)
+                  this.notifyMsg_loaded()
+                }
+            )
+          }
+      )
     },
     notifyMsg_loaded() {
       this.$notify({

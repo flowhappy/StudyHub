@@ -159,8 +159,10 @@ export default {
   ],
   methods: {
     toClass(){
-      if(this.loginUser){
+      if(this.loginUser === 'admin'){
         this.$router.push('/ManagePage');
+      }else if(this.loginUser){
+        this.$router.push('/UserManagePage');
       }else{
         this.welError('You should SignIn first')
       }
@@ -197,6 +199,10 @@ export default {
     },
     onSignUp() {
       let {pass, checkPass, name} = {...this.UpForm}
+      if(name==='admin'){
+        this.$message.error('用户名不可为admin');
+        return
+      }
       console.log(pass + name)
       if (pass === checkPass && pass && name.length >= 3 && name.length <= 5 && pass.length <= 8 && pass.length >= 6) {
         axios.post(`https://www.lloydyide.cn/stuhub/signup.php?name='${name}'&pass='${pass}'`).then(

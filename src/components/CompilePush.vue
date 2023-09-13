@@ -79,7 +79,7 @@ export default {
       console.log(this.content)
       if(name&&type){
         axios.get(
-            `https://www.lloydyide.cn/stuhub/getNewArticle.php?name=${name}&type=${type}&content=${content}`).then(res=>{
+            `https://www.lloydyide.cn/stuhub/getNewArticle.php?name=${name}&type=${type}&content=${content}&author=${sessionStorage.getItem('name')}`).then(res=>{
           console.log(res)
           window.open(location.href.replace(/CompilePush/g,'')+'ArticlePage/'+name, '_blank')
           // this.$router.push({ name: 'ArticlePage', params: { article: name } });

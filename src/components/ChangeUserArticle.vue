@@ -1,7 +1,6 @@
 <template>
   <el-table
       :data="tableData"
-      @current-change='handleCurrentChange'
       style="width: 100%;" max-height="750">
     <el-table-column
         prop="type"
@@ -17,9 +16,23 @@
         fixed="right"
         label="操作"
         width="300">
-      <template>
+      <template  slot-scope="scope">
         <el-button
-            @click.native.prevent="handleCurrentChange"
+            @click="toCommit(scope.$index, tableData)"
+            type="text"
+            size="small">
+          查看文章
+        </el-button>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+        fixed="right"
+        label="操作"
+        width="250">
+      <template  slot-scope="scope">
+        <el-button
+            @click="delArticle(scope.$index, tableData)"
             type="text"
             size="small">
           删除
@@ -34,19 +47,18 @@ import axios from "axios";
 
 export default {
   methods: {
-    handleCurrentChange(val) {
-      if (val.title){
-        axios.get(`https://www.lloydyide.cn/stuhub/delArticle.php?title=${val.title}`).then(
-            response => {
-              this.tableData = response.data
-              axios.get(`https://www.lloydyide.cn/stuhub/getArticleTitle.php`).then(
-                  response => {
-                    this.tableData = response.data
-                  }
-              )
-            }
-        )
-      }
+    delArticle(index,tableData){
+      let title = tableData[index].title
+      axios.get(`https://www.lloydyide.cn/stuhub/delArticle.php?title=${title}`).then(
+          response => {
+            this.tableData = response.data
+            axios.get(`https://www.lloydyide.cn/stuhub/getArticleTitle.php`).then(
+                response => {
+                  this.tableData = response.data
+                }
+            )
+          }
+      )
     },
     notifyMsg_loaded() {
       this.$notify({
@@ -58,11 +70,15 @@ export default {
       this.$notify.info({
         title: 'Loading...',
       });
+    },
+    toCommit(index,tableData){
+      console.log(tableData[index].title)
+      this.$router.push('/ArticlePage/'+tableData[index].title);
     }
   },
   data() {
     return {
-      tableData: [{}]
+      tableData: [{}],
     }
   },
   mounted() {

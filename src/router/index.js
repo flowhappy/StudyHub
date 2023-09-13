@@ -6,6 +6,10 @@ import ArticlePage from "@/components/ArticlePage.vue";
 import ManagePage from "@/components/ManagePage.vue";
 import ChangeUserName from "@/components/ChangeUserName.vue";
 import ChangeUserArticle from "@/components/ChangeUserArticle.vue";
+import CommitPush from "@/components/CommitPush.vue";
+import UserManagePage from "@/components/UserManagePage.vue";
+import UserChangeUserArticle from "@/components/UserChangeUserArticle.vue";
+import UserChangeUserName from "@/components/UserChangeUserName.vue";
 export default new  VueRouter({
     routes:[
         {
@@ -33,6 +37,20 @@ export default new  VueRouter({
                 {path: '/ChangeUserName', component: ChangeUserName},
                 {path: '/ChangeUserArticle', component: ChangeUserArticle}
             ]
-        }
+        },
+        {
+            path:'/CommitPush',
+            component:CommitPush,
+            name:'CommitPush'
+        },
+        {
+            path:'/UserManagePage',
+            component:UserManagePage,
+            redirect:'/UserChangeUserName',
+            children:[
+                {path: '/UserChangeUserName', component: UserChangeUserName},
+                {path: '/UserChangeUserArticle', component: UserChangeUserArticle}
+            ]
+        },
     ]
 })
