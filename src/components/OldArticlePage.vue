@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-button type="primary" style="margin: 20px;position: fixed" @click="oldFile">浏览最新版本</el-button>
+    <el-button type="primary" style="margin: 20px;float: right" @click="oldFile">浏览最新版本</el-button>
     <el-col>
       <article class="markdown-body" v-html="content" v-loading="loading"></article>
     </el-col>

@@ -42,12 +42,8 @@
           <textarea cols="45" rows="4" v-model="chat_content"></textarea>
           <i @click="send_chat" class="el-icon-s-promotion send"/>
         </div>
-
-
-
-
-
     </el-drawer>
+
     <el-col :span="3" style="position: sticky;top: 0">
       <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
         <el-radio-button :label="false">open</el-radio-button>

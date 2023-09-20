@@ -1,6 +1,34 @@
 <template>
   <div>
     <router-view></router-view>
+
+    <button class="titleBtn searchInput" @click="openSearch">Search <i class="el-icon-search"/></button>
+    <el-drawer
+        style="text-align: center"
+        title="查询你想找的文章（支持模糊查询）"
+        :visible.sync="drawer"
+        direction="ttb"
+        size="100%">
+
+      <el-input @keyup.native="searchTitle" style="width: 50vw" v-model="searchTxt" placeholder="请输入内容"></el-input>
+
+      <el-table
+          :data="titleData"
+          @current-change="toArticle"
+          stripe
+          style="width: 50vw;margin: auto">
+        <el-table-column
+            prop="title"
+            label="相似结果："
+            width="1000">
+        </el-table-column>
+      </el-table>
+
+
+
+
+    </el-drawer>
+
     <div style="background-color: #FFECE9"
          :class="{animate__animated:true}">
       <el-row class="rowMain">
@@ -115,6 +143,7 @@ export default {
       }
     };
     return {
+      titleData: [{}],
       editMessage: 'Compile and Publish',
       loginUser: sessionStorage.getItem('name'),
       enterMessage:  sessionStorage.getItem('name')==null?'Enter directly without login':'Welcome ' + sessionStorage.getItem('name') + '! Let\' get started!',
@@ -152,12 +181,21 @@ export default {
           {validator: validatePass2, trigger: 'blur'},
           {required: 'yes'}
         ]
-      }
+      },
+      searchTxt:'',
+      drawer:true
     }
   },
   props: [
   ],
   methods: {
+    toArticle(e){
+      console.log(e.title)
+      window.open(location.href+'ArticlePage/'+e.title, '_blank')
+    },
+    openSearch(){
+      this.drawer = true
+    },
     toClass(){
       if(this.loginUser === 'admin'){
         this.$router.push('/ManagePage');
@@ -240,6 +278,18 @@ export default {
             }
         )
       }
+    },
+    searchTitle(){
+      if(!this.searchTxt){
+        this.titleData = []
+        return
+      }
+      axios.get(`https://www.lloydyide.cn/stuhub/getLikelyTitle.php?title=${this.searchTxt}`).then(
+          response=> {
+            console.log(response.data)
+            this.titleData = response.data
+          }
+      )
     }
   },
   watch: {
@@ -328,6 +378,20 @@ video {
   height: 63rem
 }
 
+.searchInput{
+  position: fixed;
+  margin-left: 85vw;
+  margin-top: 1vh;
+  z-index: 99;
+}
 
+el-drawer{
+  z-index: 9999;
+  background-color: red;
+}
+
+/deep/.el-drawer.ttb {
+  opacity: 85%;
+}
 
 </style>
