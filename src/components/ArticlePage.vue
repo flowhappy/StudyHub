@@ -1,10 +1,5 @@
 <template>
   <el-row>
-    <div style="display: flex">
-      <el-button type="primary" style="margin-left: 90%;position: fixed;margin-top: 2%" @click="openChat">打开评论区</el-button>
-      <el-button type="primary" style="margin-left: 80%;position: fixed;margin-top: 2%" @click="oldFile">浏览上一版本</el-button>
-    </div>
-
     <el-drawer
         title="我是标题"
         :visible.sync="drawer"
@@ -47,6 +42,10 @@
       </div>
     </el-drawer>
     <el-col>
+      <div style="float: right">
+        <el-button type="primary" style="margin-top: 2%;" @click="openChat">打开评论区</el-button>
+        <el-button type="primary" style="margin-top: 2%;margin-right: 10px" @click="oldFile">浏览上一版本</el-button>
+      </div>
       <article class="markdown-body" v-html="content" v-loading="loading"></article>
     </el-col>
 
