@@ -76,10 +76,13 @@ export default {
     publishArticle(){
       let {name,type} = {...this.ruleForm}
       let content = this.content.replace(/\s/g,'%20');
+      let md = this.md.replace(/\s/g,'%20');
+      md = this.md.replace(/#/g,'%23');
       console.log(this.content)
       if(name&&type){
+        console.log(md)
         axios.get(
-            `https://www.lloydyide.cn/stuhub/getNewArticle.php?name=${name}&type=${type}&content=${content}&author=${sessionStorage.getItem('name')}`).then(res=>{
+            `https://www.lloydyide.cn/stuhub/getNewArticle.php?name=${name}&type=${type}&content=${content}&md=${md}&author=${sessionStorage.getItem('name')}`).then(res=>{
           console.log(res)
           window.open(location.href.replace(/CompilePush/g,'')+'ArticlePage/'+name, '_blank')
           // this.$router.push({ name: 'ArticlePage', params: { article: name } });

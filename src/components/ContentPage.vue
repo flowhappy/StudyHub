@@ -1,5 +1,53 @@
 <template>
   <el-row>
+    <el-button type="primary" style="margin-left: 90%;position: fixed;margin-top: 2%" @click="openChat">打开评论区</el-button>
+
+    <el-drawer
+        title="我是标题"
+        :visible.sync="drawer"
+        :direction="direction"
+        :with-header="false">
+        <div class="chat_title">
+            给文章评分：
+            <el-rate
+                @change="change_score"
+                v-model="article_score"
+                :colors="colors">
+            </el-rate>
+        </div>
+      <div class="chat_title">
+        《{{ cur_title }}》当前评分：
+        <el-rate disabled
+                 @change="change_score"
+                 v-model="origin_score"
+                 :colors="colors">
+        </el-rate>
+      </div>
+        <div class="chat_content">
+          <el-table
+              :data="chatData"
+              stripe
+              style="width: 100%">
+            <el-table-column
+                prop="author"
+                width="80">
+            </el-table-column>
+            <el-table-column
+                prop="content"
+            label="评论区">
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="chat_box">
+          <textarea cols="45" rows="4" v-model="chat_content"></textarea>
+          <i @click="send_chat" class="el-icon-s-promotion send"/>
+        </div>
+
+
+
+
+
+    </el-drawer>
     <el-col :span="3" style="position: sticky;top: 0">
       <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;">
         <el-radio-button :label="false">open</el-radio-button>
@@ -36,12 +84,20 @@ export default {
   name: "ContentPage",
   data() {
     return {
+      chatData: [],
+      article_score:null,
+      origin_score:3.4231,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      cur_title:'title',
+      drawer: false,
+      direction: 'rtl',
       timer:60,
       ctrl_timer:'',
       loading:false,
       type:[],
       title:[],
       isCollapse: false,
+      chat_content:'写下你的评论吧~',
       /* eslint-disable */
       content:`<!doctype html>
 <html>
@@ -61,6 +117,52 @@ export default {
     }
   },
   methods: {
+    send_chat(){
+      this.is_unLogin()
+      if(sessionStorage.getItem('name')){
+        axios.get(`https://www.lloydyide.cn/stuhub/getChat.php?title=${this.cur_title}&content=${this.chat_content}&author=${sessionStorage.getItem('name')}`).then(
+            response=> {
+              console.log(response)
+              this.$message({
+                message: '感谢您的评论！',
+                type: 'success'
+              });
+              this.chat_content='写下你的评论吧～'
+              axios.get(`https://www.lloydyide.cn/stuhub/getChatInf.php?title=${this.cur_title}`).then(
+                  response=> {
+                    this.chatData = response.data
+                  }
+              )
+            }
+        )
+      }
+    },
+    change_score(){
+      this.is_unLogin()
+      if(!sessionStorage.getItem('name')) return
+
+      axios.get(`https://www.lloydyide.cn/stuhub/getScore.php?title=${this.cur_title}&author=${sessionStorage.getItem('name')}&score=${this.article_score}`).then(
+          response=> {
+            console.log(response.data)
+            //res.data是分数对象，求平均值
+            let score_num = response.data.length
+            this.origin_score = 0
+            for(let i of response.data){
+              console.log(i.score)
+              this.origin_score += Number(i.score)
+            }
+            this.origin_score/=score_num
+            console.log(this.origin_score)
+            this.$message({
+              message: '感谢您的评分！',
+              type: 'success'
+            });
+          }
+      )
+    },
+    openChat(){
+      this.drawer=true
+    },
     notifyMsg_loaded(title) {
       this.$notify({
         title: 'Successfully Loaded!',
@@ -80,11 +182,14 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    welcomeFade_() {
-      clearInterval(this.ctrl_timer)
-      this.welcomeFade(false)
-    },
     changeArticle(e){
+      //todo::加载评分，加载评论
+      axios.get(`https://www.lloydyide.cn/stuhub/getChatInf.php?title=${e.index.title}`).then(
+          response=> {
+            this.chatData = response.data
+          }
+      )
+      this.cur_title = e.index.title
       this.loading = true
       this.notifyMsg_normal(e.index.title)
       axios.get(`https://www.lloydyide.cn/stuhub/getContent.php?title='${e.index.title}'`).then(
@@ -94,6 +199,14 @@ export default {
             this.loading = false
           }
       )
+    },
+    is_unLogin(){
+      if(!sessionStorage.getItem('name')){
+        this.$message({
+          message: '您还没有登陆，请返回主页登陆！',
+          type: 'warning'
+        });
+      }
     }
   },
   props: [
@@ -132,6 +245,48 @@ export default {
   .markdown-body {
     padding: 15px;
   }
+}
+.chat_title{
+  padding: 0.5rem;
+  height: 4.5vh;
+  width: 100%;
+  display: flex;
+  color: #61a4ff;
+}
+.chat_content{
+  height: 80vh;
+  width: 100%;
+  overflow: auto;
+}
+.chat_box{
+  height: 11vh;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+}
+
+/deep/ .el-rate__icon{
+  font-size: 2rem;
+}
+
+textarea{
+  box-shadow: 0 0 10px 0 #aaaaaa;
+  border-radius: 20px;
+  padding: 10px;
+  border: none;
+}
+
+.send{
+  font-size: 4rem;
+  margin-left: 15px;
+  color: #6382ff;
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.send:hover{
+  color: #4232ff;
+  transition: 300ms;
 }
 
 </style>

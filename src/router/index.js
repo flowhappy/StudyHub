@@ -10,6 +10,7 @@ import CommitPush from "@/components/CommitPush.vue";
 import UserManagePage from "@/components/UserManagePage.vue";
 import UserChangeUserArticle from "@/components/UserChangeUserArticle.vue";
 import UserChangeUserName from "@/components/UserChangeUserName.vue";
+import OldArticlePage from "@/components/OldArticlePage.vue";
 export default new  VueRouter({
     routes:[
         {
@@ -51,6 +52,10 @@ export default new  VueRouter({
                 {path: '/UserChangeUserName', component: UserChangeUserName},
                 {path: '/UserChangeUserArticle', component: UserChangeUserArticle}
             ]
+        },{
+            path:'/OldArticlePage/:article',
+            component:OldArticlePage,
+            name:'OldArticlePage'
         },
     ]
 })

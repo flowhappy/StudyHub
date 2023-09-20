@@ -73,7 +73,7 @@ export default {
     },
     toCommit(index,tableData){
       console.log(tableData[index].title)
-      this.$router.push('/CommitPush/'+tableData[index].title);
+      this.$router.push({name:'CommitPush',query:{title:tableData[index].title}});
     }
   },
   data() {
