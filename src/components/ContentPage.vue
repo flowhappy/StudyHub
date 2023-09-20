@@ -86,7 +86,7 @@ export default {
     return {
       chatData: [],
       article_score:null,
-      origin_score:3.4231,
+      origin_score:5,
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       cur_title:'title',
       drawer: false,
